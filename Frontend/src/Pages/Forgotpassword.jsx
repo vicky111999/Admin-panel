@@ -1,24 +1,44 @@
 import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { api } from '../../Axios/axios';
 
 const Forgotpassword = () => {
     const [error,setError] = useState({})
      const [formdata, setFormdata] = useState({
           email: ""
         });
+        const navigate = useNavigate()
         const handlechange = (e) => {
           setFormdata({
             ...formdata,
             [e.target.name]: e.target.value,
           });
+          setError({
+            ...error,
+            [e.target.name] : ''
+          })
         };
-        const handlesubmit = (e) => {
+        const handlesubmit = async(e) => {
           e.preventDefault();
             let newerror = {};
     if (!formdata?.email) newerror.email = "Email is required";
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+ if (formdata?.email && !emailRegex.test(formdata?.email)) {
+      newerror.email = "Invalid Email format";
+    }
     if (Object.keys(newerror).length > 0) {
       setError(newerror);
       return;
+    }
+    try{
+      const res = await api.post('/auth/forgotpassword',formdata)
+      console.log("hi")
+      alert(res.data.message)
+      navigate('/otpreset',{state:formdata?.email})
+    }
+    catch(err){
+    newerror.email = err.response.data.message
+    setError(newerror)
     }
         };
   return (

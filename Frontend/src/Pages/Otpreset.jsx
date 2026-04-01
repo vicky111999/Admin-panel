@@ -1,13 +1,17 @@
 import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
+import { api } from '../../Axios/axios';
 
 const Otpreset = () => {
+  const location = useLocation()
+            const isemail = location?.state || ''
     const [error,setError] = useState({})
      const [formdata, setFormdata] = useState({
-              name: "",
+              email: isemail || '',
               otp: "",
               newpassword: "",
             });
+            
             const handlechange = (e) => {
               setFormdata({
                 ...formdata,
@@ -17,16 +21,25 @@ const Otpreset = () => {
                 [e.target.name] : ''
               })
             };
-            const handlesubmit = (e) => {
+            const handlesubmit = async(e) => {
               e.preventDefault();
               let newerror={}
-              if(!formdata?.name) newerror.name = "Name is required"
+              if(!formdata?.email) newerror.email = "Name is required"
               if(!formdata?.otp) newerror.otp = "otp is required"
-              if(!formdata?.password) newerror.password = "password is required"
+              if(!formdata?.newpassword) newerror.newpassword = "password is required"
               if(Object.keys(newerror).length > 0)
               {
                 setError(newerror)
                 return;
+              }
+              try{
+                const res = await api.post('/auth/resetpassword',formdata)
+                alert(res.data.message)
+              }
+              catch(err){
+                console.log(err.response)
+                newerror.otp = err.response.data.message
+                setError(newerror)
               }
             };
   return (
@@ -54,7 +67,7 @@ const Otpreset = () => {
 
         type="text"
         value={formdata?.otp}
-        placeholder="Email Address"
+        placeholder="Email OTP"
         name="otp"
         onChange={handlechange}
       ></input>
@@ -66,11 +79,11 @@ const Otpreset = () => {
 
         type="text"
         value={formdata?.newpassword}
-        placeholder="Email Address"
+        placeholder="Email Newpassword"
         name="newpassword"
         onChange={handlechange}
       ></input>
-      <p className={` ${error?.password ? 'text-[#FF0000]' : 'invisible'} `}>{error?.password || 'placeholder'}</p>
+      <p className={` ${error?.newpassword ? 'text-[#FF0000]' : 'invisible'} `}>{error?.newpassword || 'placeholder'}</p>
 
       <button className='w-full px-[15px] py-[13px] rounded-[8px] bg-[var(--primary-violet)] text-[var(--primary-white)] text-[16px] font ' type="submit">Reset Password</button>
 <NavLink className='text-[var(--primary-violet)] text-[12px] font-semibold text-center' to='/login'>Back to login</NavLink>

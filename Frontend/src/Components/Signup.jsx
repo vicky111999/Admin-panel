@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Eyeicon } from "./Svg";
 import { api } from "../../Axios/axios";
 
@@ -11,6 +11,7 @@ const Signup = () => {
     password: "",
     roleid: 2,
   });
+  const navigate = useNavigate()
   const handlechange = (e) => {
     setFormdata({
       ...formdata,
@@ -57,6 +58,11 @@ const Signup = () => {
       const res = await api.post('/auth/register',formdata)
       if(res.data.status === true){
         alert(res.data.message)
+         setFormdata({
+      ...formdata,
+      [e.target.name]: '',
+    });
+        navigate('/login')
       }
     } catch (err) {
       newerror.email = err.response.data.message
@@ -64,7 +70,7 @@ const Signup = () => {
     }
   };
   return (
-    <form onSubmit={handlesubmit} className="w-full">
+    <form onSubmit={handlesubmit} className="  ">
       <h1 className="text-[28px] font-bold font-lato">Sign up</h1>
       <p className="text-[12px] font-lato font-semibold text-[var(--primary-text)] pb-[20px]">
         Start your 30-day free trial.

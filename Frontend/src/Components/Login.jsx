@@ -28,6 +28,10 @@ const Login = () => {
     try {
       const res = await api.post("/auth/login", formdata);
       localStorage.setItem("token",res.data.token)
+       setFormdata({
+      ...formdata,
+      [e.target.name]: '',
+    });
     } catch (err) {
       if (err.status === 404) {
         newerror.email = err.response.data.message;
