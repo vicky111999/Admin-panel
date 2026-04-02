@@ -1,8 +1,8 @@
 const bcrypt = require("bcrypt");
 const db = require("../Config/DB");
-const { authtoken } = require("../Token/authToken");
-const { generateOTP } = require("../Otpgenerate/otpgenerate");
-const { sendmail } = require("../Sendmail/mailer");
+const { authtoken } = require("../Utils/authToken");
+const { generateOTP } = require("../Utils/otpgenerate");
+const { sendmail } = require("../Utils/mailer");
 
 const register = async (req, res) => {
   const { name, email, password, roleid } = req.body;

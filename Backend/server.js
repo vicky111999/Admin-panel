@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 require('dotenv').config()
-require('./Config/initDB')
+// require('./Config/initDB')
 const { authRoutes } = require('./Routes/authroutes')
 
 const port = process.env.PORT || 3003
