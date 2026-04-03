@@ -1,8 +1,9 @@
-export const Eyeicon = ({className}) => {
+export const SlashEyeicon = ({ className, clicked }) => {
   return (
     <>
       <svg
-      className={className}
+        onClick={clicked}
+        className={className}
         width="18"
         height="15"
         viewBox="0 0 18 15"
@@ -20,6 +21,29 @@ export const Eyeicon = ({className}) => {
             <rect width="18" height="14.4" fill="white" />
           </clipPath>
         </defs>
+      </svg>
+    </>
+  );
+};
+export const Eyeicon = ({ className, clicked }) => {
+  return (
+    <>
+      <svg
+        onClick={clicked}
+        className={className}
+        width="18"
+        height="15"
+        viewBox="0 0 18 15"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g>
+          <path
+            d="M9 1.5C4.5 1.5 1.5 5.25 1 7.2C1.5 9.15 4.5 12.9 9 12.9C13.5 12.9 16.5 9.15 17 7.2C16.5 5.25 13.5 1.5 9 1.5ZM9 11.25C6.75 11.25 5 9.5 5 7.25C5 5 6.75 3.25 9 3.25C11.25 3.25 13 5 13 7.25C13 9.5 11.25 11.25 9 11.25Z"
+            fill="#727272"
+          />
+          <circle cx="9" cy="7.25" r="1.5" fill="#727272" />
+        </g>
       </svg>
     </>
   );

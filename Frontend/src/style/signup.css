@@ -4,7 +4,7 @@
 }
 .eyeicon .eyeicon-align {
   position: absolute;
-  top: 18px;
+  top: 14px;
   right: 15px;
 }
 @media (min-width:768px){
@@ -12,7 +12,7 @@
   background-image: url("../assets/log-sign.png");
   background-repeat: no-repeat;
   background-position: 117% 100%;
-  background-size: 300px 500px;
+  background-size: 300px 450px;
 }
 }
 @media (min-width:1024px){
@@ -20,7 +20,7 @@
   background-image: url("../assets/log-sign.png");
   background-repeat: no-repeat;
 background-position: 103% 107%;
-        background-size: 400px 669px;
+   background-size: 400px 400px;
 }
 }
 @media (min-width:1440px){
@@ -28,5 +28,7 @@ background-position: 103% 107%;
   background-image: url("../assets/log-sign.png");
   background-repeat: no-repeat;
   background-position: 90% 100%;
+   background-size: 400px 400px;
+
 }
 }

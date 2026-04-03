@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eyeicon } from "./Svg";
+import { Eyeicon, SlashEyeicon } from "./Svg";
 import { api } from "../../Axios/axios";
 
 const Signup = () => {
+  const [textorpass,settextorpass] = useState(false)
   const [error, setError] = useState({});
   const [formdata, setFormdata] = useState({
     name: "",
     email: "",
     password: "",
-    roleid: 2,
+    roleid: 3,
   });
   const navigate = useNavigate()
   const handlechange = (e) => {
@@ -55,7 +56,7 @@ const Signup = () => {
       return;
     }
     try {
-      const res = await api.post('/auth/register',formdata)
+      const res = await api.post('/user/register',formdata)
       if(res.data.status === true){
         alert(res.data.message)
          setFormdata({
@@ -70,14 +71,14 @@ const Signup = () => {
     }
   };
   return (
-    <form onSubmit={handlesubmit} className="  ">
+    <form onSubmit={handlesubmit} className=" ">
       <h1 className="text-[28px] font-bold font-lato">Sign up</h1>
       <p className="text-[12px] font-lato font-semibold text-[var(--primary-text)] pb-[20px]">
         Start your 30-day free trial.
       </p>
-      <div className="flex flex-col gap-[10px]">
+      <div className="flex flex-col ">
         <input
-          className="border-1 border-[var(--primary-border)] w-full px-[15px] py-[13px] rounded-[8px]  bg-[var(--primary-gray)] pl-5 placeholder:font-medium  placeholder:text-[14px]"
+          className="border-1 border-[var(--primary-border)] w-full px-[10px] py-[8px] rounded-[8px]  bg-[var(--primary-gray)] pl-5 placeholder:font-medium  placeholder:text-[14px]"
           type="text"
           value={formdata?.name}
           placeholder="Full Name"
@@ -88,7 +89,7 @@ const Signup = () => {
           {error?.name || "placeholder"}
         </p>
         <input
-          className="border-1 border-[var(--primary-border)] w-full px-[15px] py-[13px] rounded-[8px]  bg-[var(--primary-gray)] pl-5 placeholder:font-medium  placeholder:text-[14px]"
+          className="border-1 border-[var(--primary-border)] w-full px-[10px] py-[8px] rounded-[8px]  bg-[var(--primary-gray)] pl-5 placeholder:font-medium  placeholder:text-[14px]"
           type="text"
           value={formdata?.email}
           placeholder="Email Address"
@@ -101,8 +102,8 @@ const Signup = () => {
 
         <div className="eyeicon">
           <input
-            className="border-1 border-[var(--primary-border)] w-full px-[15px] py-[13px] rounded-[8px]  bg-[var(--primary-gray)] pl-5 placeholder:font-medium  placeholder:text-[14px]"
-            type="password"
+            className="border-1 border-[var(--primary-border)] w-full px-[10px] py-[8px] rounded-[8px]  bg-[var(--primary-gray)] pl-5 placeholder:font-medium  placeholder:text-[14px]"
+            type={textorpass ?"text":"password"}
             value={formdata?.password}
             placeholder="Password"
             name="password"
@@ -114,22 +115,22 @@ const Signup = () => {
             {error?.password || "placeholder"}
           </p>
 
-          <Eyeicon className="eyeicon-align" />
+       {!textorpass ?  <SlashEyeicon className="eyeicon-align" clicked={()=>{settextorpass((prev)=>!prev)}} />:<Eyeicon className="eyeicon-align" clicked={()=>{settextorpass((prev)=>!prev)}} /> }
         </div>
       </div>
-      <p className="text-[12px] text-[var(--primary-link)] pb-[20px] pt-[20px]">
+      <p className="text-[12px] text-[var(--primary-link)] pb-[20px] ">
         You are agreeing to the{" "}
         <span className="text-[var(--primary-violet)]">Terms of Services</span>
-        <br /> and{" "}
+        <br /> and
         <span className="text-[var(--primary-violet)]">Privacy Policy</span>
       </p>
       <button
-        className="w-full px-[15px] py-[13px] rounded-[8px] bg-[var(--primary-violet)] text-[var(--primary-white)] text-[16px] font "
+        className="w-full px-[10px] py-[8px] rounded-[8px] bg-[var(--primary-violet)] text-[var(--primary-white)] text-[16px] font "
         type="submit"
       >
         Get started
       </button>
-      <p className="pt-[20px]">
+      <p className="pt-[10px]">
         <span className="text-[var(--primary-text)] text-[12px] font-semibold">
           Already a member?
         </span>

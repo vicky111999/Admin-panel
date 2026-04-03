@@ -25,7 +25,8 @@ module.exports = {
       roleid:2,
       verify_otp:'',
       verify_otp_expiry:null,
-      
+      created_at:new Date(),
+      updated_at:new Date()
     }
    ]) 
   },

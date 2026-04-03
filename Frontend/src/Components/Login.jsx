@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Facebookicon, Googleicon } from "./Svg";
+import { Eyeicon, Facebookicon, Googleicon, SlashEyeicon } from "./Svg";
 import { api } from "../../Axios/axios";
 
 const Login = () => {
+    const [textorpass,settextorpass] = useState(false)
   const [error, setError] = useState({});
   const [formdata, setFormdata] = useState({
     email: "",
@@ -15,6 +16,10 @@ const Login = () => {
       ...formdata,
       [e.target.name]: e.target.value,
     });
+    setError({
+      ...error,
+      [e.target.name] :''
+    })
   };
   const handlesubmit = async (e) => {
     e.preventDefault();
@@ -26,8 +31,8 @@ const Login = () => {
       return;
     }
     try {
-      const res = await api.post("/auth/login", formdata);
-      localStorage.setItem("token",res.data.token)
+      const res = await api.post("/user/login", formdata);
+      localStorage.setItem("token",res.data.data.token)
        setFormdata({
       ...formdata,
       [e.target.name]: '',
@@ -44,15 +49,15 @@ const Login = () => {
     }
   };
   return (
-    <form onSubmit={handlesubmit} className="w-full">
+    <form onSubmit={handlesubmit} className="">
       <h1 className="text-[28px] font-bold font-lato">Login</h1>
       <p className="text-[12px] font-lato font-semibold text-[var(--primary-text)] pb-[20px]">
         How do i get started lorem ipsum dolor at?
       </p>
-      <div className="flex flex-col gap-[10px]">
+      <div className="flex flex-col ">
         <label className="text-[14px] font-semibold">Email</label>
         <input
-          className="border-1 border-[var(--primary-border)] w-full px-[15px] py-[13px] rounded-[8px]  bg-[var(--primary-gray)] pl-5 placeholder:font-medium  placeholder:text-[14px]"
+          className="border-1 border-[var(--primary-border)] w-full px-[10px] py-[8px] rounded-[8px]  bg-[var(--primary-gray)] pl-5 placeholder:font-medium  placeholder:text-[14px]"
           type="text"
           value={formdata?.email}
           placeholder="Email Address"
@@ -64,39 +69,44 @@ const Login = () => {
         </p>
 
         <label className="text-[14px] font-semibold">Password</label>
-        <input
-          className="border-1 border-[var(--primary-border)] w-full px-[15px] py-[13px] rounded-[8px]  bg-[var(--primary-gray)] pl-5 placeholder:font-medium  placeholder:text-[14px]"
-          type="password"
-          value={formdata?.password}
-          placeholder="Password"
-          name="password"
-          onChange={handlechange}
-        ></input>
-        <p className={` ${error?.password ? "text-[#FF0000]" : "invisible"} `}>
-          {error?.password || "placeholder"}
-        </p>
-
-        <NavLink
-          className="text-[var(--primary-violet)] text-[14px] font-semibold text-right"
+         <div className="eyeicon">
+                  <input
+                    className="border-1 border-[var(--primary-border)] w-full px-[10px] py-[8px] rounded-[8px]  bg-[var(--primary-gray)] pl-5 placeholder:font-medium  placeholder:text-[14px]"
+                    type={textorpass ?"text":"password"}
+                    value={formdata?.password}
+                    placeholder="Password"
+                    name="password"
+                    onChange={handlechange}
+                  ></input>
+                  <p
+                    className={` ${error?.password ? "text-[#FF0000]" : "invisible"} `}
+                  >
+                    {error?.password || "placeholder"}
+                  </p>
+        
+               {!textorpass ?  <SlashEyeicon className="eyeicon-align" clicked={()=>{settextorpass((prev)=>!prev)}} />:<Eyeicon className="eyeicon-align" clicked={()=>{settextorpass((prev)=>!prev)}} /> }
+                </div>
+                <div className="flex flex-col gap-[10px]">       <NavLink
+          className="text-[var(--primary-violet)] text-[14px]  font-semibold text-right"
           to="/forgotpassword"
         >
           Forgot password
         </NavLink>
         <button
-          className="w-full px-[15px] py-[13px] rounded-[8px] bg-[var(--primary-violet)] text-[var(--primary-white)] text-[16px] font "
+          className="w-full  px-[10px] py-[8px] rounded-[8px] bg-[var(--primary-violet)] text-[var(--primary-white)] text-[16px] font "
           type="submit"
         >
           Login
         </button>
         <button
-          className="w-full px-[10px] py-[9px] md:px-[15px] md:py-[13px] border-1 border-[var(--primary-border)]  rounded-[24px] bg-[var(--primary-white)] text-[var(--primary-black)] text-[16px] flex items-center justify-center gap-2 "
+          className="w-full px-[10px] py-[5px] md:px-[15px] md:py-[13px] border-1 border-[var(--primary-border)]  rounded-[24px] bg-[var(--primary-white)] text-[var(--primary-black)] text-[16px] flex items-center justify-center gap-2 "
           type="submit"
         >
           <Googleicon />
           <span>Sign in with Google</span>
         </button>
         <button
-          className="w-full px-[10px] py-[9px] md:px-[15px] md:py-[13px] border-1 border-[var(--primary-border)] rounded-[24px] bg-[var(--primary-white)] text-[var(--primary-black)] text-[16px] flex items-center justify-center gap-2 "
+          className="w-full px-[10px] py-[5px] md:px-[15px] md:py-[13px] border-1 border-[var(--primary-border)] rounded-[24px] bg-[var(--primary-white)] text-[var(--primary-black)] text-[16px] flex items-center justify-center gap-2 "
           type="submit"
         >
           <Facebookicon />
@@ -113,6 +123,8 @@ const Login = () => {
             Sign in
           </NavLink>
         </p>
+        </div>
+ 
       </div>
     </form>
   );

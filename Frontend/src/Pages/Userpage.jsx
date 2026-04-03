@@ -9,12 +9,12 @@ const Userpage = () => {
   const location = useLocation();
   const sign = location.pathname === "/login";
   return (
-    <div className=" h-full px-[50px] py-[70px]">
-    <div className=" grid grid-cols-1 md:grid-cols-2 lg:gap-[70px] w-full h-full shadow-[0_0_2px_rgba(0,0,0,0.2)] rounded-[30px] bg-[var(--primary-white)]">
-      <div className="flex items-center  justify-center w-full h-full ">
+    <div className="h-screen flex justify-center px-[50px] py-[70px]">
+    <div className=" grid grid-cols-1 md:grid-cols-2 lg:gap-[70px] w-full h-full  p-[20px] shadow-[0_0_2px_rgba(0,0,0,0.2)] rounded-[30px] bg-[var(--primary-white)]">
+      <div className="flex items-center  justify-center ">
         {sign ? <Login /> : <Signup />}
       </div>
-      <div className="floatingimg hidden md:flex flex-col bg-[var(--primary-violet)] h-full rounded-[15px]  pt-[70px] pl-[50px] ">
+      <div className="floatingimg hidden md:flex flex-col bg-[var(--primary-violet)] h-full rounded-[15px]  pt-[40px] pl-[50px] ">
         <p className=" text-[15px] sm:text-[20px] lg:text-[30px] xl:text-[40px] font-lato font-bold text-[var(--primary-white)] pb-[20px]">
           Very good works are <br/>waiting for you<br/> Sign up Now
         </p>

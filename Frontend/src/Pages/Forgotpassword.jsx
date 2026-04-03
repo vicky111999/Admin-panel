@@ -31,8 +31,7 @@ const Forgotpassword = () => {
       return;
     }
     try{
-      const res = await api.post('/auth/forgotpassword',formdata)
-      console.log("hi")
+      const res = await api.post('/user/forgotpassword',formdata)
       alert(res.data.message)
       navigate('/otpreset',{state:formdata?.email})
     }
@@ -42,8 +41,8 @@ const Forgotpassword = () => {
     }
         };
   return (
-<form onSubmit={handlesubmit} className='px-[10px] py-[10px] md:px-[50px] md:py-[50px] lg:px-[200px] lg:py-[100px]'>
-    <div className='flex items-center justify-center px-[10px] py-[10px] md:px-[50px] md:py-[50px] lg:px-[200px] lg:py-[100px] gap-[10px] bg-[var(--primary-white)] shadow-[0_0_2px_rgba(0,0,0,0.2)] rounded-[30px]'>
+<form onSubmit={handlesubmit} className='min-h-screen px-[10px] py-[10px] md:px-[50px] md:py-[50px] lg:px-[300px] lg:py-[100px]'>
+    <div className='flex items-center justify-center px-[10px] py-[10px] md:px-[50px] md:py-[50px] lg:px-[100px] lg:py-[20px] gap-[10px] bg-[var(--primary-white)] shadow-[0_0_2px_rgba(0,0,0,0.2)] rounded-[30px]'>
         <div className='flex flex-col gap-[10px] w-full'>
     <h1 className='text-[28px] font-bold font-lato text-center'>Forgot password?</h1>
       <p className='text-[12px] font-lato font-semibold text-[var(--primary-text)] pb-[20px] text-center'>No worries, we’ll send you reset instruction.</p>
