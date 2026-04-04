@@ -1,9 +1,8 @@
-const successresponse = (res, statuscode, message, data = null,token=null) => {
-  return res.status(statuscode).json({ status: true, message, data,token });
-};
 
-const errorresponse = (res, statuscode, message) => {
-  return res.status(statuscode).json({ status: false, message });
-};
 
-module.exports = { successresponse, errorresponse };
+const responsehandling = (res,statuscode,success=null,message,data=null)=>{
+  console.log(success)
+  return res.status(statuscode).json({status:success,message,data})
+}
+
+module.exports = {responsehandling };

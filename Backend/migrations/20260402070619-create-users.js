@@ -46,28 +46,9 @@ module.exports = {
         defaultValue:Sequelize.literal("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
       }
     })
-
-     await queryInterface.addConstraint('users',{
-      fields:['name','email','password'],
-      type:'check',
-      name:'name_email_password_not_empty',
-      where:{
-        name:{
-          [Sequelize.Op.ne] : '',
-        },
-        email:{
-          [Sequelize.Op.ne] : '',
-        },
-        password:{
-          [Sequelize.Op.ne]:'',
-        },
-      
-      }
-    })
   },
 
   async down (queryInterface, Sequelize) {
     await queryInterface.dropTable('users')
-     await queryInterface.removeConstraint('users','name_email_password_roleid_not_empty')
   }
 };

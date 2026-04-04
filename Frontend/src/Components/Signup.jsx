@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eyeicon, SlashEyeicon } from "./Svg";
+import { Eyeicon, SlashEyeicon, Xlineicon, Ylineicon } from "./Svg";
 import { api } from "../../Axios/axios";
 
 const Signup = () => {
@@ -57,6 +57,7 @@ const Signup = () => {
     }
     try {
       const res = await api.post('/user/register',formdata)
+      console.log(res)
       if(res.data.status === true){
         alert(res.data.message)
          setFormdata({
@@ -66,19 +67,24 @@ const Signup = () => {
         navigate('/login')
       }
     } catch (err) {
+      console.log(err.response)
+
       newerror.email = err.response.data.message
       setError(newerror)
     }
   };
   return (
-    <form onSubmit={handlesubmit} className=" ">
-      <h1 className="text-[28px] font-bold font-lato">Sign up</h1>
-      <p className="text-[12px] font-lato font-semibold text-[var(--primary-text)] pb-[20px]">
+    <div className="h-screen flex justify-center px-[25px] py-[20px] md:px-[25px] md:py-[20px] lg:px-[40px] lg:py-[30px] xl:px-[40px] xl:py-[60px]">
+     <div className=" grid grid-cols-1 md:grid-cols-2 w-full h-full px-[20px] py-[20px] xl:px-[20px] xl:py-[20px] shadow-[0_0_2px_rgba(0,0,0,0.2)] rounded-[30px] bg-[var(--primary-white)]">
+      <div className="flex items-center justify-center ">
+    <form onSubmit={handlesubmit} className=" md:w-[200px] xl:w-[350px]">
+      <h1 className="text-[15px] md:tex-[18px] lg:text-[20px] xl:text-[25px] font-bold font-lato">Sign up</h1>
+      <p className="text-[12px]  font-lato font-semibold text-[var(--primary-text)] pb-[10px] lg:pb-[15px] xl:pb-[20px]">
         Start your 30-day free trial.
       </p>
       <div className="flex flex-col ">
         <input
-          className="border-1 border-[var(--primary-border)] w-full px-[10px] py-[8px] rounded-[8px]  bg-[var(--primary-gray)] pl-5 placeholder:font-medium  placeholder:text-[14px]"
+          className="border-1 border-[var(--primary-border)] md:px-[5px] md:py-[4px] xl:px-[10px] xl:py-[8px] rounded-[8px]  bg-[var(--primary-gray)] pl-5 placeholder:font-medium  placeholder:text-[14px]"
           type="text"
           value={formdata?.name}
           placeholder="Full Name"
@@ -89,7 +95,7 @@ const Signup = () => {
           {error?.name || "placeholder"}
         </p>
         <input
-          className="border-1 border-[var(--primary-border)] w-full px-[10px] py-[8px] rounded-[8px]  bg-[var(--primary-gray)] pl-5 placeholder:font-medium  placeholder:text-[14px]"
+          className="border-1 border-[var(--primary-border)] w-full md:px-[5px] md:py-[4px] xl:px-[10px] xl:py-[8px] rounded-[8px]  bg-[var(--primary-gray)] pl-5 placeholder:font-medium  placeholder:text-[14px]"
           type="text"
           value={formdata?.email}
           placeholder="Email Address"
@@ -102,7 +108,7 @@ const Signup = () => {
 
         <div className="eyeicon">
           <input
-            className="border-1 border-[var(--primary-border)] w-full px-[10px] py-[8px] rounded-[8px]  bg-[var(--primary-gray)] pl-5 placeholder:font-medium  placeholder:text-[14px]"
+            className="border-1 border-[var(--primary-border)] w-full md:px-[5px] md:py-[4px] xl:px-[10px] xl:py-[8px] rounded-[8px]  bg-[var(--primary-gray)] pl-5 placeholder:font-medium  placeholder:text-[14px]"
             type={textorpass ?"text":"password"}
             value={formdata?.password}
             placeholder="Password"
@@ -110,7 +116,7 @@ const Signup = () => {
             onChange={handlechange}
           ></input>
           <p
-            className={` ${error?.password ? "text-[#FF0000]" : "invisible"} `}
+            className={` ${error?.password ? "text-[#FF0000]" : "invisible"} md:text-[12px] xl:text-[20px]`}
           >
             {error?.password || "placeholder"}
           </p>
@@ -118,20 +124,20 @@ const Signup = () => {
        {!textorpass ?  <SlashEyeicon className="eyeicon-align" clicked={()=>{settextorpass((prev)=>!prev)}} />:<Eyeicon className="eyeicon-align" clicked={()=>{settextorpass((prev)=>!prev)}} /> }
         </div>
       </div>
-      <p className="text-[12px] text-[var(--primary-link)] pb-[20px] ">
-        You are agreeing to the{" "}
-        <span className="text-[var(--primary-violet)]">Terms of Services</span>
+      <p className="font-semibold text-[12px] text-[var(--primary-link)] md:pb-[5px] lg:pb-[20px] xl:pb-[20px] ">
+        You are agreeing to the
+        <span className="font-semibold text-[12px] text-[var(--primary-violet)]">Terms of Services</span>
         <br /> and
-        <span className="text-[var(--primary-violet)]">Privacy Policy</span>
+        <span className="font-semibold text-[12px] text-[var(--primary-violet)]">Privacy Policy</span>
       </p>
       <button
-        className="w-full px-[10px] py-[8px] rounded-[8px] bg-[var(--primary-violet)] text-[var(--primary-white)] text-[16px] font "
+        className="w-full md:px-[5px] md:py-[4px] xl:px-[10px] xl:py-[8px] rounded-[8px] bg-[var(--primary-violet)] text-[var(--primary-white)] text-[16px] font "
         type="submit"
       >
         Get started
       </button>
       <p className="pt-[10px]">
-        <span className="text-[var(--primary-text)] text-[12px] font-semibold">
+        <span className="font-lato text-[var(--primary-text)] text-[12px] font-semibold">
           Already a member?
         </span>
         <Link
@@ -142,6 +148,20 @@ const Signup = () => {
         </Link>
       </p>
     </form>
+    </div>
+     <div className="floatingimg hidden md:pt-[45px] md:pl-[45px] lg:pt-[80px] lg:pl-[55px] md:flex flex-col bg-[var(--primary-violet)] h-full rounded-[15px]">
+            <p className=" text-[20px] md:text-[25px] lg:text-[33px] xl:text-[40px] font-lato font-bold text-[var(--primary-white)] pb-[20px]">
+              Very good works are <br/>waiting for you<br/> Sign up Now
+            </p>
+            <div className="flex justify-between h-full w-full">
+            <div className="flex flex-col h-full justify-between pb-[50px]">
+              <Ylineicon />
+              <Xlineicon/>
+            </div>
+          </div>
+          </div>
+           </div>
+    </div>
   );
 };
 

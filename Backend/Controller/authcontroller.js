@@ -4,61 +4,48 @@ const { authtoken } = require("../Utils/authToken");
 const { generateOTP } = require("../Utils/otpgenerate");
 const { sendmail } = require("../Utils/mailer");
 const User = require("../Models/dbQuery");
-const { errorresponse, successresponse } = require("../Utils/response");
+const { responsehandling } = require("../Utils/response");
 
 const register = async (req, res) => {
   const { name, email, password, roleid } = req.body;
   try {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/;
-    if (!name || !email || !password)
-      return res
-        .status(400)
-        .json({ status: false, message: "Name,Email,Password is required" });
-    else if (!emailRegex.test(email))
-      return res
-        .status(400)
-        .json({ status: false, message: "Email is not required format" });
-    else if (!passwordRegex.test(password))
-      return res
-        .status(400)
-        .json({ status: false, message: "Password is not require format" });
+    console.log(name, email, password, roleid)
+    if (!name || !email || !password) return responsehandling(res,400,false,"Name,Email,Password is required")
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return responsehandling(res,400,false,"Email is not required format")
+    if (!/^(?=.*[A-Z])/.test(password)) return responsehandling(res,400,false,"Must includes Uppercase")
+    if (!/^(?=.*[a-z])/.test(password)) return responsehandling(res,400,false,"Must includes Lowercase")
+    if (!/^(?=.*[!@#$%^&*])/.test(password)) return responsehandling(res,400,false,"Must includes Special Character")
+    if (!/^(?=.*[\d])/.test(password)) return responsehandling(res,400,false,"Must includes Numbers")
+      if(!password.length > 7) return responsehandling(res,400,false,"Password atleast 8 characters")
     const hashedpassword = await bcrypt.hash(password, 10);
     const emailexist = await User.findOne({ where: { email } });
-    if (emailexist) return errorresponse(res, 409, "Email already exist");
+    if (emailexist) return responsehandling(res, 409, false,"Email already exist");
     const result = await User.create({
       name,
       email,
       password: hashedpassword,
       roleid,
     });
-    return successresponse(res, 200, "Registered Successfully");
+    return responsehandling(res, 200, true,"Registered Successfully");
   } catch (err) {
-    return errorresponse(res, 500, err.message);
+    return responsehandling(res, 500, false,err.message);
   }
 };
 
 const login = async (req, res) => {
-  const { roleid, email, password } = req.body;
+  const {  email, password } = req.body;
   try {
-    if (!roleid || !email || !password)
-      return res
-        .status(400)
-        .json({ status: false, message: "Email,Password is required" });
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email))
-      return res
-        .status(409)
-        .json({ status: false, message: "Email is not required format" });
+    if ( !email || !password) return responsehandling(res, 409, false,"Email,Password is required");
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+    if (!emailRegex.test(email)) return responsehandling(res, 409, false,"Email is not required format");
     const data = await User.findOne({ where: { email } });
-    if (!data) return errorresponse(res, 404, "Email is not exist");
+    if (!data) return responsehandling(res, 404, false,"Email is not exist");
     const Ispassword = await bcrypt.compare(password, data.dataValues.password);
-    if (!Ispassword) return errorresponse(res, 401, "Invalid Password");
+    if (!Ispassword) return responsehandling(res, 401, false,"Invalid Password");
     const token = authtoken(data);
-    return successresponse(res, 201, "Loggedin Successfully", { token });
+    return responsehandling(res, 201,true, "Loggedin Successfully", { token });
   } catch (err) {
-    return errorresponse(res, 500, err.message);
+    return responsehandling(res, 500, false,err.message);
   }
 };
 
@@ -66,53 +53,43 @@ const forgotpassword = async (req, res) => {
   try {
     const { email } = req.body;
 
-    if (!email)
-      return res
-        .status(400)
-        .json({ status: false, message: "Email is required" });
+    if (!email) return responsehandling(res, 409, false,"Email is required");
     const emailexist = await User.findOne({ where: { email } });
-    if (!emailexist) return errorresponse(res, 404, "Email not exists");
+    if (!emailexist) return responsehandling(res, 404, false,"Email not exists");
     const otp = generateOTP().toString();
-    const subject = "Forgotpassword from Trackdo";
-    const text = `Your OTP is :${otp}`;
+    const maildata ={
+      subject:"Forgotpassword from Trackdo",
+      text:`Your OTP is :${otp}
+      ${`http://localhost:5173/otpreset?email=${email}&otp=${otp}`}`,
+    }
     const hashedOTP = await bcrypt.hash(otp, 10);
     const verifyotpExpired = Date.now() + 5 * 60 * 1000;
     const [otpsent] = await User.update(
       { verify_otp: hashedOTP, verify_otp_expiry: verifyotpExpired },
-      { where: { email: emailexist.email } },
+      { where: { id: emailexist.id } },
     );
-    if (!otpsent) return errorresponse(res, 409, "Not Updated");
-    const Emailsent = sendmail(email, subject, text);
-    return successresponse(res, 200, "Otp sent");
+    if (!otpsent) return responsehandling(res, 409, false,"Not Updated");
+    const Emailsent = sendmail(emailexist.email, maildata);
+    return responsehandling(res, 200, true,"Otp sent");
   } catch (err) {
-    return errorresponse(res, 500, err.message);
+    return responsehandling(res, 500, false,err.message);
   }
 };
 
 const resetpassword = async (req, res) => {
   try {
     const { email, otp, newpassword } = req.body;
-    if (!email || !otp || !newpassword)
-      return res
-        .status(400)
-        .json({ status: false, message: "Email,OTP,Newpassword is required" });
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email))
-      return res
-        .status(400)
-        .json({ status: false, message: "Email is not required format" });
-    const isuser = await User.findOne({ where: { email } });
-    if (!isuser) return errorresponse(res, 404, "Email is not exist");
-    const data = isuser.toJSON();
-    if (!data.verify_otp) return errorresponse(res, 404, "OTP is not exist");
-    if (!data.verify_otp_expiry)
-      return errorresponse(res, 404, "OTPExpiry is not exist");
-    const Isotp = await bcrypt.compare(otp, data.verify_otp);
-    if (!Isotp) return errorresponse(res, 409, "Please enter correct OTP");
-    if (Date.now() > data.verify_otp_expiry)
-      return errorresponse(res, 409, "OTP Expired");
-    const verifyotp = "";
-    const verifyotpExpired = "";
+    if (!email || !otp || !newpassword) return responsehandling(res, 400, false,"Email,OTP,Newpassword is required");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return responsehandling(res, 400, false,"Email is not required format");
+    const isuser = await User.findOne({ where: { email },raw:true });
+    if (!isuser) return responsehandling(res, 404,false, "Email is not exist");
+    if (!isuser.verify_otp) return responsehandling(res, 404, false,"OTP is not exist");
+    if (!isuser.verify_otp_expiry) return responsehandling(res, 404, false,"OTPExpiry is not exist");
+    if(otp.length !== 6) return responsehandling(res, 404, false,"OTP must 6 digit");
+    const Isotp = await bcrypt.compare(otp, isuser.verify_otp);
+    if (!Isotp) return responsehandling(res, 409, false,"Please enter correct OTP");
+    if (Date.now() > isuser.verify_otp_expiry)
+      return responsehandling(res, 409,false, "OTP Expired");
     const hashedpassword = await bcrypt.hash(newpassword, 10);
     const updateddata = await User.update(
       {
@@ -120,11 +97,11 @@ const resetpassword = async (req, res) => {
         verify_otp: '',
         verify_otp_expiry: '',
       },
-      { where: { email } },
+      { where: { id:isuser.id } },
     );
-    return errorresponse(res, 201, "Password Reseted Successfully");
+    return responsehandling(res, 201, true,"Password Reseted Successfully");
   } catch (err) {
-    return errorresponse(res, 500, err.message);
+    return responsehandling(res, 500, false,err.message);
   }
 };
 

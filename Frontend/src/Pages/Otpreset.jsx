@@ -1,16 +1,19 @@
 import React, { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useSearchParams } from "react-router-dom";
 import { api } from "../../Axios/axios";
 import { Eyeicon, SlashEyeicon } from "../Components/Svg";
 
 const Otpreset = () => {
   const location = useLocation();
   const isemail = location?.state || "";
+  const [searchparams] = useSearchParams();
+  const paramsemail = searchparams.get('email')
+const paramsotp = searchparams.get('otp')
   const [textorpass, settextorpass] = useState(false);
   const [error, setError] = useState({});
   const [formdata, setFormdata] = useState({
-    email: isemail || "",
-    otp: "",
+    email: isemail || paramsemail || "",
+    otp: paramsotp || "",
     newpassword: "",
   });
 
@@ -29,6 +32,7 @@ const Otpreset = () => {
     if (!formdata?.email) newerror.email = "Name is required";
     if (!formdata?.otp) newerror.otp = "otp is required";
     if (!formdata?.newpassword) newerror.newpassword = "password is required";
+    if(formdata?.otp.length !== 6) newerror.otp = "otp only 6 digit"
     if (Object.keys(newerror).length > 0) {
       setError(newerror);
       return;
@@ -83,22 +87,36 @@ const Otpreset = () => {
 
             <label className="text-[14px] font-semibold">New Password</label>
             <div className="eyeicon">
-                     <input
-                       className="border-1 border-[var(--primary-border)] w-full px-[10px] py-[8px] rounded-[8px]  bg-[var(--primary-gray)] pl-5 placeholder:font-medium  placeholder:text-[14px]"
-                       type={textorpass ?"text":"password"}
-                       value={formdata?.newpassword}
-                       placeholder="New Password"
-                       name="newpassword"
-                       onChange={handlechange}
-                     ></input>
-                     <p
-                       className={` ${error?.newpassword ? "text-[#FF0000]" : "invisible"} `}
-                     >
-                       {error?.newpassword || "placeholder"}
-                     </p>
-           
-                  {!textorpass ?  <SlashEyeicon className="eyeicon-align" clicked={()=>{settextorpass((prev)=>!prev)}} />:<Eyeicon className="eyeicon-align" clicked={()=>{settextorpass((prev)=>!prev)}} /> }
-                   </div>
+              <input
+                className="border-1 border-[var(--primary-border)] w-full px-[10px] py-[8px] rounded-[8px]  bg-[var(--primary-gray)] pl-5 placeholder:font-medium  placeholder:text-[14px]"
+                type={textorpass ? "text" : "password"}
+                value={formdata?.newpassword}
+                placeholder="New Password"
+                name="newpassword"
+                onChange={handlechange}
+              ></input>
+              <p
+                className={` ${error?.newpassword ? "text-[#FF0000]" : "invisible"} `}
+              >
+                {error?.newpassword || "placeholder"}
+              </p>
+
+              {!textorpass ? (
+                <SlashEyeicon
+                  className="eyeicon-align"
+                  clicked={() => {
+                    settextorpass((prev) => !prev);
+                  }}
+                />
+              ) : (
+                <Eyeicon
+                  className="eyeicon-align"
+                  clicked={() => {
+                    settextorpass((prev) => !prev);
+                  }}
+                />
+              )}
+            </div>
 
             <button
               className="w-full px-[10px] py-[8px] rounded-[8px] bg-[var(--primary-violet)] text-[var(--primary-white)] text-[16px] font "
