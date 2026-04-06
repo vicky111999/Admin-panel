@@ -47,8 +47,8 @@
     .floatingimg {
   background-image: url("../assets/log-sign.png");
   background-repeat: no-repeat;
-background-position: 103% 107%;
-   background-size: 354px 294px;
+background-position: 100% 107%;
+   background-size: 361px 340px;
 }
  .eyeicon .eyeicon-align {
   top: 12px;
@@ -86,7 +86,7 @@ background-position: 103% 107%;
   background-image: url("../assets/log-sign.png");
   background-repeat: no-repeat;
   background-position: 90% 100%;
-   background-size: 452px 335px;
+   background-size: 462px 395px;
 }
 .eyeicon .eyeicon-align {
   top: 13px;

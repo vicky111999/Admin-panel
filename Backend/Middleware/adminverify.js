@@ -10,7 +10,7 @@ const adminverify=(req,res,next)=>{
                 const decoded = jwt.verify(payload,process.env.JWT_SECRETKEY)
                 if(!decoded) return responsehandling(res,401,false,"Token expired")
                     if(decoded.roleid !== 2) return responsehandling(res,403,false,"Access Denied")
-                 req.user = decoded.id 
+                 req.user = decoded
                 next()  
             }
             catch(err){

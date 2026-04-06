@@ -1,16 +1,17 @@
 const jwt = require("jsonwebtoken");
+const { responsehandling } = require("../Utils/response");
 
 const verifyToken = (req, res, next) => {
   const Token = req.headers.authorization;
   try {
-    if (!Token) return errorresponse(res, 404, "Token not found");
+    if (!Token) return responsehandling(res,404,false,"Token not found")
     const authtoken = Token.split(" ")[1];
     const ValidToken = jwt.verify(authtoken, process.env.JWT_SECRETKEY);
-    if (!ValidToken) return errorresponse(res, 401, "Token expired");
+    if (!ValidToken) return responsehandling(res,401,false,"Token expired")
     req.user = ValidToken.id;
     next();
   } catch (err) {
-    return errorresponse(res, 500, err.message);
+    return responsehandling(res,500,false,err.message)
   }
 };
 

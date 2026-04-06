@@ -9,26 +9,25 @@ const { responsehandling } = require("../Utils/response");
 const register = async (req, res) => {
   const { name, email, password, roleid } = req.body;
   try {
-    console.log(name, email, password, roleid)
-    if (!name || !email || !password) return responsehandling(res,400,false,"Name,Email,Password is required")
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return responsehandling(res,400,false,"Email is not required format")
-    if (!/^(?=.*[A-Z])/.test(password)) return responsehandling(res,400,false,"Must includes Uppercase")
-    if (!/^(?=.*[a-z])/.test(password)) return responsehandling(res,400,false,"Must includes Lowercase")
-    if (!/^(?=.*[!@#$%^&*])/.test(password)) return responsehandling(res,400,false,"Must includes Special Character")
-    if (!/^(?=.*[\d])/.test(password)) return responsehandling(res,400,false,"Must includes Numbers")
-      if(!password.length > 7) return responsehandling(res,400,false,"Password atleast 8 characters")
+    if (!name || !email || !password) return responsehandling(res,400,"Name,Email,Password is required")
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return responsehandling(res,400,"Email is not required format")
+    if (!/^(?=.*[A-Z])/.test(password)) return responsehandling(res,400,"Must includes Uppercase")
+    if (!/^(?=.*[a-z])/.test(password)) return responsehandling(res,400,"Must includes Lowercase")
+    if (!/^(?=.*[!@#$%^&*])/.test(password)) return responsehandling(res,400,"Must includes Special Character")
+    if (!/^(?=.*[\d])/.test(password)) return responsehandling(res,400,"Must includes Numbers")
+      if(!password.length > 7) return responsehandling(res,400,"Password atleast 8 characters")
     const hashedpassword = await bcrypt.hash(password, 10);
     const emailexist = await User.findOne({ where: { email } });
-    if (emailexist) return responsehandling(res, 409, false,"Email already exist");
+    if (emailexist) return responsehandling(res, 409, "Email already exist");
     const result = await User.create({
       name,
       email,
       password: hashedpassword,
       roleid,
     });
-    return responsehandling(res, 200, true,"Registered Successfully");
+    return responsehandling(res, 200, "Registered Successfully");
   } catch (err) {
-    return responsehandling(res, 500, false,err.message);
+    return responsehandling(res, 500, err.message);
   }
 };
 
@@ -38,12 +37,17 @@ const login = async (req, res) => {
     if ( !email || !password) return responsehandling(res, 409, false,"Email,Password is required");
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
     if (!emailRegex.test(email)) return responsehandling(res, 409, false,"Email is not required format");
-    const data = await User.findOne({ where: { email } });
+    const data = await User.findOne({ where: { email },raw:true });
     if (!data) return responsehandling(res, 404, false,"Email is not exist");
     const Ispassword = await bcrypt.compare(password, data.dataValues.password);
     if (!Ispassword) return responsehandling(res, 401, false,"Invalid Password");
     const token = authtoken(data);
-    return responsehandling(res, 201,true, "Loggedin Successfully", { token });
+    const userdetail = {
+      token:token,
+      email:data.email,
+      roleid:data.roleid
+    }
+    return responsehandling(res, 201, "Loggedin Successfully",userdetail);
   } catch (err) {
     return responsehandling(res, 500, false,err.message);
   }
