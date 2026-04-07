@@ -39,7 +39,7 @@ const login = async (req, res) => {
     if (!emailRegex.test(email)) return responsehandling(res, 409, false,"Email is not required format");
     const data = await User.findOne({ where: { email },raw:true });
     if (!data) return responsehandling(res, 404, false,"Email is not exist");
-    const Ispassword = await bcrypt.compare(password, data.dataValues.password);
+    const Ispassword = await bcrypt.compare(password, data.password);
     if (!Ispassword) return responsehandling(res, 401, false,"Invalid Password");
     const token = authtoken(data);
     const userdetail = {
@@ -47,9 +47,10 @@ const login = async (req, res) => {
       email:data.email,
       roleid:data.roleid
     }
+    console.log(userdetail)
     return responsehandling(res, 201, "Loggedin Successfully",userdetail);
   } catch (err) {
-    return responsehandling(res, 500, false,err.message);
+    return responsehandling(res, 500,err.message);
   }
 };
 

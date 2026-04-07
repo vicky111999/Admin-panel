@@ -1,0 +1,48 @@
+[ {
+    "id":"Home",
+    "title":"Home",
+    "icon":"home",
+    "sub":[
+        {"name":"Dashboard","path":"/"},
+        {"name":"Analystics","path":"/analystics"}
+    ]
+},
+{
+    "id":"Pages",
+    "title":"Pages",
+    "icon":"pages",
+
+    "sub":[
+        {"name":"Dashboard","path":"/"},
+        {"name":"Analystics","path":"/analystics"}
+    ]
+},
+{
+    "id":"Applications",
+    "title":"Applications",
+    "icon":"applications",
+    "sub":[
+        {"name":"Dashboard","path":"/"},
+        {"name":"Analystics","path":"/analystics"}
+    ]
+},{
+    "id":"E-commerce",
+    "title":"E-commerce",
+    "icon":"ecommerce",
+
+    "sub":[
+        {"name":"Dashboard","path":"/"},
+        {"name":"Analystics","path":"/analystics"}
+    ]
+},{
+    "id":"Authentication",
+    "title":"Authentication",
+    "icon":"authentication",
+
+    "sub":[
+        {"name":"Dashboard","path":"/"},
+        {"name":"Analystics","path":"/analystics"}
+    ]
+}
+
+]

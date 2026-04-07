@@ -11,6 +11,7 @@
   --primary-border:#DBDCDE;
   --primary-text:#89868D;
   --primary-link:#727272;
+  --primary-purple:#DECCFE;
 }
 body{
   background-color: var(--primary-gray);

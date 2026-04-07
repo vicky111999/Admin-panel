@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { Eyeicon, Facebookicon, Googleicon, SlashEyeicon } from "./Svg";
 import { api } from "../../Axios/axios";
 import '../style/login.css'
-import { UseAuth } from "../Context/UseAuth";
+// import { UseAuth } from "../Context/UseAuth";
 
 const Login = () => {
     const [textorpass,settextorpass] = useState(false)
@@ -36,8 +36,8 @@ const Login = () => {
     }
     try {
       const res = await api.post("/user/login", formdata);
-      console.log(res.data.data)
-      localStorage.setItem("token",res.data.data.token)
+      const tokendetail = res.data.data
+      localStorage.setItem("token",JSON.stringify(tokendetail))
        setFormdata({
       ...formdata,
       [e.target.name]: '',
