@@ -53,7 +53,7 @@ const User = sequelize.define(
       type: DataTypes.DATE,
     },
   },
-  { tableName: "users", timestamps: false },
+  { tableName: "users",paranoid:true,deletedAt:'deleted_at',timestamps: false },
 );
 
 module.exports = User;

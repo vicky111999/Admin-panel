@@ -39,7 +39,7 @@ const Adminusertable = ({ data ,change,pageinfo}) => {
         current:pageinfo.current,
         pageSize:pageinfo.pageSize,
         total:pageinfo.total,
-        // showSizeChanger:true,
+        showSizeChanger:true,
       }}   onChange={change} className="custom-table"/>
       
     </>

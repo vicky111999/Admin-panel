@@ -1,0 +1,10 @@
+.activebar::before{
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    border-radius: 0 45% 45% 0;
+    background: var(--primary-violet);
+}

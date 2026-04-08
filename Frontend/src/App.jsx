@@ -6,6 +6,7 @@ import Signup from './Components/Signup'
 import Login from './Components/Login'
 import Adminlayouts from './Components/Adminlayouts'
 import Admindashboard from './Pages/Admindashboard'
+import Users from './Pages/Users'
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
       <Route path='*' element={"404 not found"}></Route>
       <Route path='/admin' element={<Adminlayouts role={2} />}>
       <Route index element={<Admindashboard/>}></Route>
+      <Route path='users' element={<Users/>}></Route>
       <Route path='*' element={"404 not found"}></Route>
       </Route>
     </Routes>

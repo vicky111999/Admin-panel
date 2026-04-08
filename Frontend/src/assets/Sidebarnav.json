@@ -3,17 +3,16 @@
     "title":"Home",
     "icon":"home",
     "sub":[
-        {"name":"Dashboard","path":"/"},
-        {"name":"Analystics","path":"/analystics"}
+        {"name":"Dashboard","path":"/admin"},
+        {"name":"users","path":"/admin/users"}
     ]
 },
 {
     "id":"Pages",
     "title":"Pages",
     "icon":"pages",
-
     "sub":[
-        {"name":"Dashboard","path":"/"},
+        {"name":"Dashboard","path":""},
         {"name":"Analystics","path":"/analystics"}
     ]
 },
