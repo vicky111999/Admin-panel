@@ -52,6 +52,22 @@ const User = sequelize.define(
     updated_at: {
       type: DataTypes.DATE,
     },
+    deleted:{
+      type:DataTypes.INTEGER(1),
+      defaultValue:0,
+      validate:{
+        isIn:{
+          args:[[0,1]],
+          msg:'Only allow 0 and 1'
+        }
+      }
+    },
+    deleted_by:{
+        type:DataTypes.INTEGER,    
+    },
+    deleted_at:{
+      type:DataTypes.DATE
+    }
   },
   { tableName: "users",paranoid:true,deletedAt:'deleted_at',timestamps: false },
 );

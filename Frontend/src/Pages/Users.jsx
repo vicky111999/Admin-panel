@@ -18,7 +18,7 @@ const Users = () => {
       pageSize:10,
       total:0
      })
-   
+     
         const userdetails =async(page=1,limit=1)=>{
           try{
      const res = await api.get(`/admin/getallusers?page=${page}&limit=${limit}`)
@@ -33,8 +33,7 @@ const Users = () => {
        catch(err){
      console.log(err.message)
        }}
-       
-        useEffect(() => {
+       useEffect(() => {
        userdetails()
       },[]);
       useEffect(()=>{

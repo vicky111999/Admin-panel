@@ -5,6 +5,6 @@ const { adminverify } = require('../Middleware/adminverify')
 const adminRoutes = express.Router()
 
 adminRoutes.get('/getallusers',adminverify,userfetch)
-adminRoutes.delete('/userdelete/:id',userdelete)
+adminRoutes.delete('/userdelete/:id',adminverify,userdelete)
 adminRoutes.put('/userupdate/:id',useredit)
 module.exports = {adminRoutes}
