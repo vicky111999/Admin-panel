@@ -68,6 +68,7 @@ const userfetch = async (req, res) => {
       prevpage: page > 1 ? page - 1 : "",
       nextpage: page * limit < users.count ? page + 1 : "",
     };
+    console.log("bye")
     return responsehandling(res, 200, "Users Fetched successfully", user);
   } catch (err) {
     return responsehandling(res, 500, false, err.message);
